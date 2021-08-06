@@ -21,10 +21,10 @@ test:
 	mysql -s -utest -P3301 --protocol=TCP --verbose --ssl-cert=pki/client.pem --ssl-key=pki/client-key.pem --ssl-ca=pki/ca.pem --ssl-cipher=ECDHE-ECDSA-AES128-GCM-SHA256 -e "SELECT * FROM performance_schema.session_status        WHERE VARIABLE_NAME IN ('Ssl_version','Ssl_cipher')"
 
 clean:
-	docker stop server01;
-	docker rm server01;
-	rm -rf pki/
-	sudo rm -rf volumes/mysql/server01
+	docker-compose stop;
+	docker-compose rm -sf;
+	rm -rf pki/;
+	sudo rm -rf volumes/
 
 logs:
 	docker logs server01
