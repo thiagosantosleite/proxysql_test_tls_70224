@@ -1,3 +1,6 @@
+ALGO=$1
+SIZE=$2
+
 mkdir pki
 
 rm -rf *.csr
@@ -26,8 +29,8 @@ cat > ca-csr.json <<EOF
 {
   "CN": "ProxySQL",
   "key": {
-    "algo": "ecdsa",
-    "size": 256
+    "algo": "$ALGO",
+    "size": $SIZE
   },
   "names": [
     {
@@ -47,8 +50,8 @@ cat > server-csr.json <<EOF
 {
   "CN": "server",
   "key": {
-    "algo": "ecdsa",
-    "size": 256
+    "algo": "$ALGO",
+    "size": $SIZE
   },
   "names": [
     {
@@ -73,8 +76,8 @@ cat > client-csr.json <<EOF
 {
   "CN": "client",
   "key": {
-    "algo": "ecdsa",
-    "size": 256
+    "algo": "$ALGO",
+    "size": $SIZE
   },
   "names": [
     {
