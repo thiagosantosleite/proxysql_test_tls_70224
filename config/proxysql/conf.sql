@@ -1,5 +1,5 @@
 DELETE FROM mysql_servers;
-INSERT INTO mysql_servers (hostgroup_id,hostname,port,max_replication_lag, max_connections) VALUES (0,'server01',3306,1, 1);
+INSERT INTO mysql_servers (hostgroup_id,hostname,port,max_replication_lag, max_connections, use_ssl) VALUES (0,'server01',3306,1, 1, 1);
 DELETE FROM mysql_replication_hostgroups;
 INSERT INTO mysql_replication_hostgroups(writer_hostgroup, reader_hostgroup) VALUES (0,1);
 LOAD MYSQL SERVERS TO RUNTIME;
@@ -22,6 +22,9 @@ SAVE ADMIN VARIABLES TO DISK;
 
 
 set mysql-have_ssl='true';
+set mysql-ssl_p2s_key='/var/lib/proxysql/client-key.pem';
+set mysql-ssl_p2s_cert='/var/lib/proxysql/client-cert.pem';
 LOAD MYSQL VARIABLES TO RUNTIME;
 SAVE MYSQL VARIABLES TO DISK;
+
 

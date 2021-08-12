@@ -29,6 +29,8 @@ copy:
 	docker cp pki/ca.pem proxysql01:/var/lib/proxysql/proxysql-ca.pem
 	docker cp pki/server.pem proxysql01:/var/lib/proxysql/proxysql-cert.pem
 	docker cp pki/server-key.pem proxysql01:/var/lib/proxysql/proxysql-key.pem
+	docker cp pki/client.pem proxysql01:/var/lib/proxysql/client-cert.pem
+	docker cp pki/client-key.pem proxysql01:/var/lib/proxysql/client-key.pem
 	docker exec proxysql01 chown proxysql:proxysql /var/lib/proxysql -R
 	docker exec proxysql01 cat /var/lib/proxysql/proxysql-key.pem
 	docker exec server01 cat /var/lib/mysql/ca-key.pem
@@ -57,7 +59,7 @@ login-proxysql-nossl:
 	mysql -utest_proxysql -P6033 --protocol=TCP --verbose -ptest -e "\s" | grep Cipher
 
 login-proxysql-spiffe:
-	mysql -utest_mysql -P6033 --protocol=TCP --verbose --ssl-cert=/tmp/svid.0.pem --ssl-key=/tmp/svid.0.key --ssl-ca=pki/ca.pem --ssl-cipher=ECDHE-ECDSA-AES128-GCM-SHA256 -ptest -e "\s" | grep Cipher
+	mysql -utest_mysql -P6033 --protocol=TCP --verbose --ssl-cert=/tmp/svid.0.pem --ssl-key=/tmp/svid.0.key --ssl-ca=pki/ca.pem --ssl-cipher=ECDHE-ECDSA-AES128-GCM-SHA256 -e "\s" | grep Cipher
 
 
 clean:
