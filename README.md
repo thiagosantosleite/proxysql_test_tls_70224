@@ -1,6 +1,6 @@
 **1) Create pki infrastrucuture**
 
-You have 2 options, use RSA or EC keys:
+You have 2 options, use RSA or EC keys (doesnt matter, proxysql and mysql supports both):
 
 ```
 make create-pki-ecdsa
@@ -39,8 +39,8 @@ make spiffe
 
 **5) Copy certificates**
 
-copy ca, server and client certificates created in step 1 to mysql and proxysql 
-spire agent/server is using the same ca certificate to sign the new certificates, so using the same pki chain and both proxysql and mysql are able to verify it
+* copy ca, server and client certificates created in step 1 to mysql and proxysql 
+* spire agent/server is using the same ca certificate to sign the new certificates, so using the same pki chain and both proxysql and mysql are able to verify it
 
 
 ```
@@ -50,10 +50,10 @@ make copy
 
 **6) config MySQL and ProxySQL**
 
-- Create the monitor user 
-- create a test_mysql user with x509 authentication (this is the same user linked with spiffe id)
-- create a test_proxysql user with authentication by password
-- configure proxysql (with spiffe attribute for test_mysql user)
+* Create the monitor user 
+* create a test_mysql user with x509 authentication (this is the same user linked with spiffe id)
+* create a test_proxysql user with authentication by password
+* configure proxysql (with spiffe attribute for test_mysql user)
 
 ```
 make configs
@@ -69,10 +69,10 @@ make reload
 
 **8) Run tests**
 
-login-mysql - authenticate direct in mysql using test_mysql user, so not using spiffe only using the client certificates signed by same CA
-login-proxysql - authenticate in proxysql using the client certificates, but using a standard user with ssl enabled and password, using user test_proxysql
-login-proxysql-nossl - authenticate in proxysql not using any certificate, using user test_proxysql
-login-proxysql-spiffe - authenticate in proxysql using certificates and spiffe id with use test_mysql
+* login-mysql - authenticate direct in mysql using test_mysql user, so not using spiffe only using the client certificates signed by same CA
+* login-proxysql - authenticate in proxysql using the client certificates, but using a standard user with ssl enabled and password, using user test_proxysql
+* login-proxysql-nossl - authenticate in proxysql not using any certificate, using user test_proxysql (still use ssl ???? looks like it fetches the server certificate, encrypt the connection, but I'm not sure if I'm connecting the trusted server, because the certficate is no verified)
+* login-proxysql-spiffe - authenticate in proxysql using certificates and spiffe id with use test_mysql
 
 ```
 make login-mysql
