@@ -1,11 +1,11 @@
-build:
-	docker-files/build.sh
-
 create-pki-ecdsa:
 	./create_pki.sh ecdsa 256
 
 create-pki-rsa:
 	./create_pki.sh rsa 2048
+
+build:
+	docker-files/build.sh
 
 up:
 	docker-compose up -d;
@@ -16,7 +16,9 @@ spiffe:
 	echo "$$TOKEN" && \
 	docker exec -d server01 /spire/bin/spire-agent run -joinToken $$TOKEN && \
 	docker exec spire /spire/bin/spire-server entry create -parentID spiffe://example.org/host -spiffeID spiffe://example.org/workload -selector unix:user:mysql || \
-	docker exec server01 su mysql -c "/spire/bin/spire-agent api fetch x509 -write /tmp"
+    echo "already created spiffe://example.org/workload" && \
+	docker exec server01 su mysql -c "/spire/bin/spire-agent api fetch x509 -write /tmp" && \
+	sleep 5s
        
 copy:
 	docker cp pki/ca.pem server01:/var/lib/mysql/ca.pem;
