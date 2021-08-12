@@ -1,0 +1,8 @@
+FROM mysql:8.0.26 
+RUN apt update -y
+RUN apt install git make curl gcc telnet procps iputils-ping -y
+RUN git clone https://github.com/spiffe/spire
+WORKDIR /spire
+RUN make build
+ADD agent.conf /spire/conf/agent/agent.conf
+ADD ca.pem /spire/conf/agent/

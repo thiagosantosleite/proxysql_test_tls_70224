@@ -1,8 +1,20 @@
 version: '3.9'
 services:
+  spire:
+    container_name: spire
+    image: spire:local
+    ports:
+      - "8081:8081"
+    expose:
+      - '8081'
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 512M
   server01:
     container_name: server01
-    image: mysql:8.0.26
+    image: mysql:local
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
     ports:
@@ -11,7 +23,6 @@ services:
       - '3301'
     volumes:
        - ./config/server01/my.cnf:/etc/my.cnf
-       - ./config/ssh-keys:/root/.ssh
        - ./volumes/mysql/server01:/var/lib/mysql
     deploy:
       resources:
@@ -20,7 +31,7 @@ services:
           memory: 512M
   proxysql01:
     container_name: proxysql01
-    image: proxysql/proxysql:2.2.0
+    image: proxysql:ssl
     ports:
       - "6032:6032"
       - "6033:6033"

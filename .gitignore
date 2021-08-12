@@ -1,2 +1,4 @@
 pki/
 volumes/
+docker-files/ca.pem
+docker-files/ca-key.pem

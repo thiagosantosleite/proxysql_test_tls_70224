@@ -1,0 +1,7 @@
+FROM debian:9
+ADD proxysql_2.2.0-debian9_amd64.deb .
+RUN apt-get update -y
+RUN apt-get install -y wget lsb-release gnupg apt-transport-https ca-certificates
+RUN dpkg -i proxysql_2.2.0-debian9_amd64.deb
+RUN proxysql --version
+CMD proxysql -f -d /var/lib/proxysql
