@@ -2,3 +2,5 @@ pki/
 volumes/
 docker-files/ca.pem
 docker-files/ca-key.pem
+docker-files/cfssl
+docker-files/cfssljson
