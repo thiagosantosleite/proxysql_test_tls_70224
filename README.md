@@ -31,7 +31,10 @@ make up
 
 **4) Configure spiffe**
 
-Join spire agent in mysql node and create spiffe id spiffe://example.org/workload
+Join spire agent in mysql node and create 2 spiffe id workloads:
+
+* URI:spiffe://example.org/workload
+* DNS:proxysql.com, URI:spiffe://example.org/workload-proxysql 
 
 ```
 make spiffe
