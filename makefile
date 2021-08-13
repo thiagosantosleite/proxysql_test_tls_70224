@@ -15,8 +15,11 @@ spiffe:
 	TOKEN=$$(docker exec spire /spire/bin/spire-server token generate -spiffeID spiffe://example.org/host | awk '{print $$2}') && \
 	echo "$$TOKEN" && \
 	docker exec -d server01 /spire/bin/spire-agent run -joinToken $$TOKEN && \
+    sleep 5s && \
 	docker exec spire /spire/bin/spire-server entry create -parentID spiffe://example.org/host -spiffeID spiffe://example.org/workload -selector unix:user:mysql || \
-    echo "already created spiffe://example.org/workload" && \
+	echo "already created spiffe://example.org/workload" && \
+	docker exec spire /spire/bin/spire-server entry create -parentID spiffe://example.org/host -spiffeID spiffe://example.org/workload-proxysql -selector unix:user:mysql --dns proxylsql.com || \
+    echo "already created spiffe://example.org/workload-proxysql" && \
 	docker exec server01 su mysql -c "/spire/bin/spire-agent api fetch x509 -write /tmp" && \
 	sleep 5s
        
@@ -38,6 +41,10 @@ copy:
 	docker exec server01 cat /var/lib/mysql/ca-key.pem
 	docker cp server01:/tmp/svid.0.pem /tmp/svid.0.pem
 	docker cp server01:/tmp/svid.0.key /tmp/svid.0.key
+	docker cp server01:/tmp/bundle.0.pem /tmp/bundle.0.pem
+	docker cp server01:/tmp/svid.1.pem /tmp/svid.1.pem
+	docker cp server01:/tmp/svid.1.key /tmp/svid.1.key
+	docker cp server01:/tmp/bundle.1.pem /tmp/bundle.1.pem
 
 configs:
 	#mysql -uroot -proot -P3301 --protocol=TCP --host=127.0.0.1 -e "set @@global.ssl_cipher=ECDHE_ECDSA_AES128_GCM_SHA256";
@@ -63,6 +70,8 @@ login-proxysql-nossl:
 login-proxysql-spiffe:
 	mysql -utest_mysql -P6033 --protocol=TCP --verbose --ssl-cert=/tmp/svid.0.pem --ssl-key=/tmp/svid.0.key --ssl-ca=pki/ca.pem --ssl-cipher=ECDHE-ECDSA-AES128-GCM-SHA256 -e "\s" | grep Cipher
 
+login-proxysql-spiffe-dns:
+	mysql -utest_mysql -P6033 --protocol=TCP --verbose --ssl-cert=/tmp/svid.1.pem --ssl-key=/tmp/svid.1.key --ssl-ca=pki/ca.pem --ssl-cipher=ECDHE-ECDSA-AES128-GCM-SHA256 -e "\s" | grep Cipher
 
 clean:
 	docker-compose stop;

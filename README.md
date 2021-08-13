@@ -73,6 +73,7 @@ make reload
 * login-proxysql - authenticate in proxysql using the client certificates, but using a standard user with ssl enabled and password, using user test_proxysql
 * login-proxysql-nossl - authenticate in proxysql not using any certificate, using user test_proxysql (still use ssl ???? looks like it fetches the server certificate, encrypt the connection, but I'm not sure if I'm connecting the trusted server, because the certficate is no verified)
 * login-proxysql-spiffe - authenticate in proxysql using certificates and spiffe id with use test_mysql
+* login-proxysql-spiffe-dns - authenticate in proxysql using certificates and spiffe id with user test_mysql, but this certificate have spiffe id and a DNS
 
 ```
 make login-mysql
@@ -82,6 +83,8 @@ or
 make login-proxysql-nossl
 or
 make login-proxysql-spiffe
+or 
+make login-proxysql-spiffe-dns
 ```
 
 

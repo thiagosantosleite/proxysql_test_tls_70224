@@ -7,4 +7,5 @@ RUN make build
 ADD server.conf /spire/conf/server/server.conf
 ADD ca.pem /spire/conf/server/
 ADD ca-key.pem /spire/conf/server/
+RUN rm /spire/conf/server/dummy_upstream_ca.crt /spire/conf/server/dummy_upstream_ca.key
 ENTRYPOINT /spire/bin/spire-server run
