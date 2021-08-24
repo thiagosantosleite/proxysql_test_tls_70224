@@ -9,6 +9,7 @@ DELETE FROM mysql_users;
 INSERT INTO mysql_users (username,password,active,default_hostgroup, use_ssl) values ('root','root',1,0, 1);
 INSERT INTO mysql_users (username,password,active,default_hostgroup, use_ssl) values ('test_proxysql', 'test', 1,0,1); 
 insert into mysql_users (username, password, active, use_ssl, attributes) values ('test_mysql', '', 1, 1, '{"spiffe_id": "spiffe://example.org/workload"}');
+insert into mysql_users (username, password, active, use_ssl, attributes) values ('test_mysql_dns', '', 1, 1, '{"spiffe_id": "spiffe://example.org/workload-proxysql"}');
 LOAD MYSQL USERS TO RUNTIME;
 SAVE MYSQL USERS TO DISK;
 

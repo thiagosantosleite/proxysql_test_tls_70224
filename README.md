@@ -41,8 +41,9 @@ make spiffe
 ```
 
 **5) Copy certificates**
-
-* copy ca, server and client certificates created in step 1 to mysql and proxysql 
+* add to ca.pem file the intermediate certificate created by spire
+* make a copy of spire generate certificates in /tmp/old, so when you rebuild the env again you are able to test "make login-proxysql-old-pki" using a different pki chain
+* copy ca with the whole chain, server and client certificates created in step 1 to mysql and proxysql 
 * spire agent/server is using the same ca certificate to sign the new certificates, so using the same pki chain and both proxysql and mysql are able to verify it
 
 
@@ -70,14 +71,25 @@ reload mysql and proxysql certificates
 make reload
 ```
 
-**8) Run tests**
+**Setup all in one **
+
+* all-ecdsa - it does the whole setup and configuration using ec certificates (all steps above)
+* all-rsa - it does the whole setup and configuration using rsa certificates (all steps above)
+```
+make all-ecdsa
+or 
+make all-rsa
+```
+
+**Running tests**
 
 * login-mysql - authenticate direct in mysql using test_mysql user, so not using spiffe only using the client certificates signed by same CA
 * login-proxysql - authenticate in proxysql using the client certificates, but using a standard user with ssl enabled and password, using user test_proxysql
 * login-proxysql-nossl - authenticate in proxysql not using any certificate, using user test_proxysql (still use ssl ???? looks like it fetches the server certificate, encrypt the connection, but I'm not sure if I'm connecting the trusted server, because the certficate is no verified)
 * login-proxysql-spiffe - authenticate in proxysql using certificates and spiffe id with use test_mysql
 * login-proxysql-spiffe-dns - authenticate in proxysql using certificates and spiffe id with user test_mysql, but this certificate have spiffe id and a DNS
-
+* login-proxysql-old-pki - authenticate in proxysql using certificates from a different pki chain, so it must fail
+* all-tests - run all tests in one shot
 ```
 make login-mysql
 or
@@ -88,6 +100,10 @@ or
 make login-proxysql-spiffe
 or 
 make login-proxysql-spiffe-dns
+or 
+make login-proxysql-old-pki
+or 
+make all-tests
 ```
 
 
