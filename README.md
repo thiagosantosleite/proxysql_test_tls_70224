@@ -71,7 +71,7 @@ reload mysql and proxysql certificates
 make reload
 ```
 
-**Setup all in one **
+**Setup all in one**
 
 * all-ecdsa - it does the whole setup and configuration using ec certificates (all steps above)
 * all-rsa - it does the whole setup and configuration using rsa certificates (all steps above)
@@ -122,22 +122,5 @@ make logs-spire
 
 ```
 make clean
-```
-
-
-
-
-
-**If you want simulate the issue with different chains:**
-1) you can provision the environment following this guide
-2) before cleanup make a copy of leaf certificates with spiffe:
-/tmp/svid.0.key -> /tmp/old/svid.0.key
-/tmp/svid.0.key -> /tmp/old/svid.0.key
-3) cleanup the environment (make clean)
-4) you can provision the environment following this guide again, so now the new env has a different pki infra from file in /tmp/old/
-5) try to connect to proxysql using the old certificates
-
-```
-mysql -utest_mysql -P6033 --protocol=TCP --verbose --ssl-cert=/tmp/old/svid.0.pem --ssl-key=/tmp/old/svid.0.key -e "\s" | grep Cipher
 ```
 
